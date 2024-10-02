@@ -11,6 +11,7 @@ class ChatController extends GetxController {
   var isLoading = true.obs;
   var userId = 0.obs;
   var nameUser = ''.obs;
+  var conversationId = 0.obs;
 
   final ContactController contactController = Get.put(ContactController());
 
@@ -18,6 +19,8 @@ class ChatController extends GetxController {
   void onInit() {
     super.onInit();
     userId.value = int.tryParse(Get.parameters['userId'] ?? '0') ?? 0;
+    // conversationId.value =
+    //     int.tryParse(Get.parameters['conversationId'] ?? '0') ?? 0;
     connectToSocket(userId.value);
     fetchMessage(userId.value);
     nameUser.value = contactController.contacts
