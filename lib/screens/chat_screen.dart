@@ -5,16 +5,13 @@ import 'package:get/get.dart';
 class ChatScreen extends StatelessWidget {
   final ChatController chatController = Get.put(ChatController());
   final TextEditingController messageController = TextEditingController();
-  // final String userId = Get.parameters['userId'] ?? '';
 
   ChatScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
-    // chatController.connectToSocket(int.parse(userId));
-
     return Scaffold(
-      appBar: AppBar(title: const Text('Chat')),
+      appBar: AppBar(title: Text('Chat with ${chatController.nameUser.value}')),
       body: SafeArea(
         child: Column(
           children: [

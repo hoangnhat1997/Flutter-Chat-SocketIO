@@ -1,3 +1,4 @@
+import 'package:flutter_chat_socketio/controllers/sign_in_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -5,6 +6,7 @@ import 'dart:convert';
 class ContactController extends GetxController {
   var contacts = <dynamic>[].obs;
   var isLoading = true.obs;
+  final SignInController signInController = Get.put(SignInController());
 
   @override
   void onInit() {
@@ -17,7 +19,10 @@ class ContactController extends GetxController {
       isLoading(true);
       var response = await http.get(Uri.parse('http://localhost:3000/users'));
       if (response.statusCode == 200) {
-        contacts.value = json.decode(response.body);
+        contacts.value = json
+            .decode(response.body)
+            .where((contact) => contact['id'] != signInController.userId.value)
+            .toList();
       }
     } finally {
       isLoading(false);

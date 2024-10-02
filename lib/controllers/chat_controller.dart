@@ -1,3 +1,4 @@
+import 'package:flutter_chat_socketio/controllers/contact_controller.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -9,6 +10,9 @@ class ChatController extends GetxController {
   var isConnected = false.obs;
   var isLoading = true.obs;
   var userId = 0.obs;
+  var nameUser = ''.obs;
+
+  final ContactController contactController = Get.put(ContactController());
 
   @override
   void onInit() {
@@ -16,6 +20,8 @@ class ChatController extends GetxController {
     userId.value = int.tryParse(Get.parameters['userId'] ?? '0') ?? 0;
     connectToSocket(userId.value);
     fetchMessage(userId.value);
+    nameUser.value = contactController.contacts
+        .firstWhere((element) => element['id'] == userId.value)['name'];
   }
 
   // Initialize socket connection
