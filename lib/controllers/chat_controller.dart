@@ -27,7 +27,6 @@ class ChatController extends GetxController {
         .firstWhere((element) => element['id'] == userId.value)['name'];
   }
 
-  // Initialize socket connection
   void connectToSocket(int conversationId) {
     socket = IO.io('http://localhost:3000', <String, dynamic>{
       'transports': ['websocket'],
@@ -38,10 +37,12 @@ class ChatController extends GetxController {
     socket.onConnect((_) {
       isConnected(true);
       print('Connected to WebSocket');
+      // Join the room with conversationId
       socket.emit('joinRoom', conversationId);
     });
 
     socket.on('message', (data) {
+      print('New message received: $data');
       messages.add(data);
     });
 

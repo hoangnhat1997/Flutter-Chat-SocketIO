@@ -54,11 +54,11 @@ class ChatScreen extends StatelessWidget {
                               style: const TextStyle(fontSize: 16),
                             ),
                             const SizedBox(height: 4),
-                            Text(
-                              'From: ${message['sender']['name']}',
-                              style: TextStyle(
-                                  fontSize: 12, color: Colors.grey[600]),
-                            ),
+                            // Text(
+                            //   'From: ${message['sender']['name']}',
+                            //   style: TextStyle(
+                            //       fontSize: 12, color: Colors.grey[600]),
+                            // ),
                           ],
                         ),
                       ),
