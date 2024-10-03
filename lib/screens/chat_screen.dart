@@ -84,8 +84,8 @@ class ChatScreen extends StatelessWidget {
                     icon: const Icon(Icons.send),
                     onPressed: () {
                       chatController.sendMessage(
-                        signInController.userId.value, // senderId
-                        chatController.userId.value, // conversationId
+                        signInController.userId.value,
+                        chatController.userId.value,
                         messageController.text,
                       );
                       messageController.clear();
