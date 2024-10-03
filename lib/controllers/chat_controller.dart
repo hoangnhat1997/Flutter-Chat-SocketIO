@@ -23,11 +23,37 @@ class ChatController extends GetxController {
   void onInit() {
     super.onInit();
     userId.value = int.tryParse(Get.parameters['userId'] ?? '0') ?? 0;
-
+    getConversationId();
     connectToSocket(signInController.userId.value, userId.value);
-    fetchMessage(conversationId.value);
     nameUser.value = contactController.contacts
         .firstWhere((element) => element['id'] == userId.value)['name'];
+  }
+
+  void getConversationId() async {
+    try {
+      isLoading(true);
+      var body = {
+        'user1Id': signInController.userId.value,
+        'user2Id': userId.value,
+      };
+
+      var response = await http.post(
+        Uri.parse('http://localhost:3000/conversations'),
+        headers: {
+          'Content-Type':
+              'application/json', // Set the content type to application/json
+        },
+        body: jsonEncode(body), // Convert body to JSON
+      );
+      if (response.statusCode == 201) {
+        conversationId.value = json.decode(response.body)['id'];
+        await fetchMessage(conversationId.value);
+      }
+    } catch (e) {
+      print('error getConversationId');
+    } finally {
+      isLoading(false);
+    }
   }
 
   void connectToSocket(int senderId, int recipientId) {
@@ -81,7 +107,7 @@ class ChatController extends GetxController {
     }
   }
 
-  void fetchMessage(int conversationId) async {
+  Future<void> fetchMessage(int conversationId) async {
     try {
       isLoading(true);
       var response = await http
