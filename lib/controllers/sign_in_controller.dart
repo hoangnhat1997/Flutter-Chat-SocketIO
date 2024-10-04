@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter_chat_socketio/screens/contact_list_screen.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 
@@ -16,7 +17,7 @@ class SignInController extends GetxController {
     try {
       isLoading(true);
       var response = await http
-          .post(Uri.parse('http://192.168.2.31:3000/users/login'), body: {
+          .post(Uri.parse('${dotenv.env['API_URL']}/users/login'), body: {
         'email': email.value,
       });
       if (response.statusCode == 201) {

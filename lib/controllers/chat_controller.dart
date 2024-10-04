@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter_chat_socketio/controllers/contact_controller.dart';
 import 'package:flutter_chat_socketio/controllers/sign_in_controller.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'dart:convert';
@@ -37,7 +38,7 @@ class ChatController extends GetxController {
         'user2Id': userId.value,
       };
       var response = await http.post(
-        Uri.parse('http://192.168.2.31:3000/conversations'),
+        Uri.parse('${dotenv.env['API_URL']}/conversations'),
         headers: {
           'Content-Type': 'application/json',
         },
@@ -55,7 +56,7 @@ class ChatController extends GetxController {
   }
 
   void connectToSocket(int senderId, int recipientId) {
-    socket = IO.io('http://192.168.2.31:3000', <String, dynamic>{
+    socket = IO.io('${dotenv.env['API_URL']}', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
@@ -114,8 +115,8 @@ class ChatController extends GetxController {
   Future<void> fetchMessage(int conversationId) async {
     try {
       isLoading(true);
-      var response = await http.get(
-          Uri.parse('http://192.168.2.31:3000/messages/${conversationId}'));
+      var response = await http
+          .get(Uri.parse('${dotenv.env['API_URL']}/messages/$conversationId'));
       if (response.statusCode == 200) {
         messages.value = json.decode(response.body);
       }

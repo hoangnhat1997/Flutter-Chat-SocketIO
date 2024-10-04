@@ -4,8 +4,10 @@ import 'package:flutter_chat_socketio/screens/contact_list_screen.dart';
 import 'package:flutter_chat_socketio/screens/sign_in_screen.dart';
 import 'package:flutter_chat_socketio/screens/video_chat_screen.dart';
 import 'package:get/get.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
-void main() {
+Future main() async {
+  await dotenv.load(fileName: ".env");
   runApp(const MyApp());
 }
 

@@ -53,11 +53,12 @@ typedef void DataChannelCallback(RTCDataChannel dc);
 
 class Signaling {
   late SimpleWebSocket _socket;
-  var _host;
-  var _port = 3000;
+  // ignore: prefer_typing_uninitialized_variables
+  final _host = "172.168.60.114";
+  final _port = 3000;
   late RTCPeerConnection peerConnection;
   late RTCDataChannel dataChannel;
-  var _remoteCandidates = [];
+  final _remoteCandidates = [];
   var _turnCredential;
 
   MediaStream? _localStream;
@@ -108,7 +109,7 @@ class Signaling {
     'optional': [],
   };
 
-  Signaling(this._host);
+  Signaling();
 
   close() {
     var _localStream = this._localStream;
@@ -122,14 +123,15 @@ class Signaling {
   }
 
   void switchCamera() {
-    final _localStream = this._localStream;
-    if (_localStream != null) {
-      _localStream.getVideoTracks()[0].switchCamera();
+    final localStream = _localStream;
+    if (localStream != null) {
+      // ignore: deprecated_member_use
+      localStream.getVideoTracks().first.switchCamera();
     }
   }
 
   void invite(String peerId, String media, useScreen) {
-    this.onStateChange(SignalingState.CallStateNew);
+    onStateChange(SignalingState.CallStateNew);
 
     _createPeerConnection(peerId, media, useScreen, isHost: true).then((pc) {
       peerConnection = pc;
@@ -141,16 +143,16 @@ class Signaling {
   }
 
   void bye() {
-    var _localStream = this._localStream;
-    if (_localStream != null) {
-      _localStream.dispose();
-      _localStream = null;
+    var localStream = _localStream;
+    if (localStream != null) {
+      localStream.dispose();
+      localStream = null;
     }
 
     dataChannel.close();
     peerConnection.close();
 
-    this.onStateChange(SignalingState.CallStateBye);
+    onStateChange(SignalingState.CallStateBye);
     _remoteCandidates.clear();
   }
 
@@ -162,14 +164,15 @@ class Signaling {
           var description = message;
           var media = 'call';
 
-          this.onStateChange(SignalingState.CallStateNew);
+          onStateChange(SignalingState.CallStateNew);
 
           var pc = await _createPeerConnection(id, media, false);
           peerConnection = pc;
           await pc.setRemoteDescription(
               RTCSessionDescription(description['sdp'], description['type']));
           await _createAnswer(id, pc, media);
-          if (this._remoteCandidates.isNotEmpty) {
+          if (_remoteCandidates.isNotEmpty) {
+            // ignore: avoid_function_literals_in_foreach_calls
             _remoteCandidates.forEach((candidate) async {
               await pc.addCandidate(candidate);
             });
@@ -200,7 +203,7 @@ class Signaling {
         break;
       case CLIENT_ID_EVENT:
         {
-          this.onEventUpdate({'clientId': 'Id: $message'});
+          onEventUpdate({'clientId': 'Id: $message'});
         }
         break;
       default:
@@ -271,16 +274,21 @@ class Signaling {
     };
 
     MediaStream stream = userScreen
+        // ignore: deprecated_member_use
         ? await navigator.getDisplayMedia(mediaConstraints)
+        // ignore: deprecated_member_use
         : await navigator.getUserMedia(mediaConstraints);
-    this.onLocalStream(stream);
+    onLocalStream(stream);
     return stream;
   }
 
   _createPeerConnection(id, media, userScreen, {isHost = false}) async {
     if (media != 'data') _localStream = await createStream(media, userScreen);
     RTCPeerConnection pc = await createPeerConnection(_iceServers, _config);
-    if (media != 'data') pc.addStream(_localStream!);
+    // if (media != 'data') pc.addTrack(_localStream as MediaStreamTrack);
+    for (var track in _localStream!.getTracks()) {
+      await peerConnection.addTrack(track, _localStream!);
+    }
     pc.onIceCandidate = (candidate) {
       final iceCandidate = {
         'sdpMLineIndex': candidate.sdpMLineIndex,
@@ -291,7 +299,7 @@ class Signaling {
     };
 
     print('Turn on speaker phone');
-    _localStream?.getAudioTracks()[0].enableSpeakerphone(true);
+    _localStream?.getAudioTracks().first.enableSpeakerphone(true);
 
     pc.onIceConnectionState = (state) {
       print('onIceConnectionState $state');
@@ -302,12 +310,12 @@ class Signaling {
     };
 
     pc.onAddStream = (stream) {
-      this.onAddRemoteStream(stream);
+      onAddRemoteStream(stream);
       //_remoteStreams.add(stream);
     };
 
     pc.onRemoveStream = (stream) {
-      this.onRemoveRemoteStream(stream);
+      onRemoveRemoteStream(stream);
       _remoteStreams.removeWhere((it) {
         return (it.id == stream.id);
       });
@@ -323,11 +331,11 @@ class Signaling {
   _addDataChannel(id, RTCDataChannel channel) {
     channel.onDataChannelState = (e) {};
     channel.onMessage = (RTCDataChannelMessage data) {
-      this.onDataChannelMessage(channel, data);
+      onDataChannelMessage(channel, data);
     };
     dataChannel = channel;
 
-    this.onDataChannel(channel);
+    onDataChannel(channel);
   }
 
   _createDataChannel(id, RTCPeerConnection pc, {label = 'fileTransfer'}) async {
