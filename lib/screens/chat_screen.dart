@@ -1,19 +1,44 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_socketio/controllers/chat_controller.dart';
 import 'package:flutter_chat_socketio/controllers/sign_in_controller.dart';
+import 'package:flutter_chat_socketio/controllers/video_chat_controller.dart';
 import 'package:get/get.dart';
 
 class ChatScreen extends StatelessWidget {
   final ChatController chatController = Get.put(ChatController());
   final TextEditingController messageController = TextEditingController();
   final SignInController signInController = Get.put(SignInController());
+  final VideoChatController videoChatController =
+      Get.put(VideoChatController());
 
   ChatScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Chat with ${chatController.nameUser.value}')),
+      appBar: AppBar(
+        title: Text('Chat with ${chatController.nameUser.value}'),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.call),
+            onPressed: () {
+              // Get.toNamed('/video-chat/${chatController.userId.value}');
+            },
+          ),
+          IconButton(
+            icon: const Icon(Icons.video_call),
+            onPressed: () {
+              videoChatController.invitePeer(
+                videoChatController.textEditingController.text,
+                false,
+              );
+              // Get.toNamed('/video-chat/192.168.1.2');
+
+              // Get.toNamed('/video-chat/${chatController.userId.value}');
+            },
+          ),
+        ],
+      ),
       body: SafeArea(
         child: Column(
           children: [

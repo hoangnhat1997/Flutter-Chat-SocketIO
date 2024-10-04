@@ -36,14 +36,12 @@ class ChatController extends GetxController {
         'user1Id': signInController.userId.value,
         'user2Id': userId.value,
       };
-
       var response = await http.post(
-        Uri.parse('http://localhost:3000/conversations'),
+        Uri.parse('http://192.168.2.31:3000/conversations'),
         headers: {
-          'Content-Type':
-              'application/json', // Set the content type to application/json
+          'Content-Type': 'application/json',
         },
-        body: jsonEncode(body), // Convert body to JSON
+        body: jsonEncode(body),
       );
       if (response.statusCode == 201) {
         conversationId.value = json.decode(response.body)['id'];
@@ -57,7 +55,7 @@ class ChatController extends GetxController {
   }
 
   void connectToSocket(int senderId, int recipientId) {
-    socket = IO.io('http://localhost:3000', <String, dynamic>{
+    socket = IO.io('http://192.168.2.31:3000', <String, dynamic>{
       'transports': ['websocket'],
       'autoConnect': false,
     });
@@ -78,6 +76,12 @@ class ChatController extends GetxController {
         print('New message received: $data');
       }
       messages.add(data);
+    });
+
+    socket.on('video-chat', (data) {
+      if (kDebugMode) {
+        print('Video chat: $data');
+      }
     });
 
     socket.onDisconnect((_) {
@@ -110,8 +114,8 @@ class ChatController extends GetxController {
   Future<void> fetchMessage(int conversationId) async {
     try {
       isLoading(true);
-      var response = await http
-          .get(Uri.parse('http://localhost:3000/messages/${conversationId}'));
+      var response = await http.get(
+          Uri.parse('http://192.168.2.31:3000/messages/${conversationId}'));
       if (response.statusCode == 200) {
         messages.value = json.decode(response.body);
       }

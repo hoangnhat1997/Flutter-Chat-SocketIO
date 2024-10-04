@@ -16,7 +16,7 @@ class SignInController extends GetxController {
     try {
       isLoading(true);
       var response = await http
-          .post(Uri.parse('http://localhost:3000/users/login'), body: {
+          .post(Uri.parse('http://192.168.2.31:3000/users/login'), body: {
         'email': email.value,
       });
       if (response.statusCode == 201) {

@@ -21,6 +21,7 @@ class ContactListScreen extends StatelessWidget {
             itemBuilder: (context, index) {
               var contact = contactController.contacts[index];
               return ListTile(
+                leading: const Icon(Icons.person, size: 40),
                 title: Text(contact['name']),
                 onTap: () {
                   Get.toNamed('/chat/${contact['id']}');
