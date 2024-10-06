@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_chat_socketio/utils/signaling.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:get/get.dart';
 import 'package:flutter_webrtc/flutter_webrtc.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -22,9 +21,10 @@ class VideoChatController extends GetxController {
     super.onInit();
     requestPermissions().then((_) {
       initRenderers();
-      ipAddress.value = Get.parameters['ipAddress'] ?? '';
+      // ipAddress.value = Get.parameters['ipAddress'] ?? '';
       // You can connect after initializing renderers if needed
       // connect(ipAddress.value);
+      connect();
     });
   }
 
@@ -54,7 +54,7 @@ class VideoChatController extends GetxController {
     }
   }
 
-  void connect(String serverIP) {
+  void connect() {
     _signaling = Signaling()..connect();
 
     _signaling.onStateChange = (SignalingState state) {

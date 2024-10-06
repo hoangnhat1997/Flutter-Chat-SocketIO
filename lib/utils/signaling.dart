@@ -212,10 +212,10 @@ class Signaling {
   }
 
   void connect() async {
-    var url = 'http://$_host:$_port';
-    _socket = SimpleWebSocket(url);
+    // var url = 'http://$_host:$_port';
+    // _socket = SimpleWebSocket(url);
 
-    print('connect to $url');
+    // print('connect to $url');
 
     if (_turnCredential == null) {
       try {
@@ -239,23 +239,23 @@ class Signaling {
       } catch (e) {}
     }
 
-    _socket.onOpen = () {
-      print('onOpen');
-      onStateChange(SignalingState.ConnectionOpen);
-      print({'name': DeviceInfo.label, 'user_agent': DeviceInfo.userAgent});
-    };
+    // _socket.onOpen = () {
+    //   print('onOpen');
+    //   onStateChange(SignalingState.ConnectionOpen);
+    //   print({'name': DeviceInfo.label, 'user_agent': DeviceInfo.userAgent});
+    // };
 
-    _socket.onMessage = (tag, message) {
-      print('Received data: $tag - $message');
-      this.onMessage(tag, message);
-    };
+    // _socket.onMessage = (tag, message) {
+    //   print('Received data: $tag - $message');
+    //   this.onMessage(tag, message);
+    // };
 
-    _socket.onClose = (int code, String reason) {
-      print('Closed by server [$code => $reason]!');
-      this.onStateChange(SignalingState.ConnectionClosed);
-    };
+    // _socket.onClose = (int code, String reason) {
+    //   print('Closed by server [$code => $reason]!');
+    //   this.onStateChange(SignalingState.ConnectionClosed);
+    // };
 
-    await _socket.connect();
+    // await _socket.connect();
   }
 
   Future<MediaStream> createStream(media, userScreen) async {

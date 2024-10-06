@@ -14,7 +14,7 @@ class VideoChatScreen extends StatelessWidget {
     // Use GetX's controller
 
     // Connect to the signaling server
-    videoChatController.connect(videoChatController.ipAddress.value);
+    // videoChatController.connect(videoChatController.ipAddress.value);
 
     return Scaffold(
       appBar: AppBar(
