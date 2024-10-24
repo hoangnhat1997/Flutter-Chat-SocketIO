@@ -53,13 +53,11 @@ class SimpleWebSocket {
   }
 
   send(event, data) {
-    if (socket != null) {
-      socket.emit(event, data);
-      print('send: $event - $data');
-    }
+    socket.emit(event, data);
+    print('send: $event - $data');
   }
 
   close() {
-    if (socket != null) socket.close();
+    socket.close();
   }
 }

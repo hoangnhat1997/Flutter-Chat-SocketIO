@@ -28,13 +28,7 @@ class ChatScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.video_call),
             onPressed: () {
-              videoChatController.invitePeer(
-                videoChatController.textEditingController.text,
-                false,
-              );
-              // Get.toNamed('/video-chat/172.168.60.114');
-
-              // Get.toNamed('/video-chat/${chatController.userId.value}');
+              Get.toNamed('/video-chat/192.168.2.41');
             },
           ),
         ],

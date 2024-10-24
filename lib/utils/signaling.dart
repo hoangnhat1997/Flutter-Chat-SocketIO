@@ -54,7 +54,7 @@ typedef void DataChannelCallback(RTCDataChannel dc);
 class Signaling {
   late SimpleWebSocket _socket;
   // ignore: prefer_typing_uninitialized_variables
-  final _host = "172.168.60.114";
+  final _host = "192.168.2.41";
   final _port = 3000;
   late RTCPeerConnection peerConnection;
   late RTCDataChannel dataChannel;
