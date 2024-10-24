@@ -25,6 +25,8 @@ class VideoChatController extends GetxController {
       // You can connect after initializing renderers if needed
       // connect(ipAddress.value);
       connect();
+
+      invitePeer(textEditingController.text, false);
     });
   }
 

@@ -28,7 +28,7 @@ class ChatScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.video_call),
             onPressed: () {
-              Get.toNamed('/video-chat/192.168.2.41');
+              Get.toNamed('/video-chat/192.168.21');
             },
           ),
         ],
